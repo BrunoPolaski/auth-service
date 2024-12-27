@@ -1,14 +1,10 @@
 package main
 
 import (
-	"github.com/aws/aws-lambda-go/events"
+	"github.com/BrunoPolaski/login-service/internal/app"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
 func main() {
-	lambda.Start(handler)
-}
-
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-
+	lambda.Start(app.Handler)
 }
