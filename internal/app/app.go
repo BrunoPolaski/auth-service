@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -9,12 +10,12 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func Handler(request events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
+func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if request.Path == "" {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Body:       "Path cannot be empty",
-		}
+		}, fmt.Errorf("Path cannot be empty")
 	}
 
 	router := routes.Init()
@@ -38,5 +39,5 @@ func Handler(request events.APIGatewayProxyRequest) events.APIGatewayProxyRespon
 		StatusCode: rr.StatusCode,
 		Body:       rr.Body,
 		Headers:    rr.Headers,
-	}
+	}, nil
 }
