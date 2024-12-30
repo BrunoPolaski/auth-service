@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -11,13 +10,12 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Handler(request events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
+	logger.InitLogger()
+
 	router := routes.Init()
-	httpRequest, err := http.NewRequest(request.HTTPMethod, request.Path, strings.NewReader(request.Body))
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to create HTTP request: %v", err))
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, fmt.Errorf("failed to create HTTP request: %w", err)
-	}
+
+	httpRequest, _ := http.NewRequest(request.HTTPMethod, request.Path, strings.NewReader(request.Body))
 
 	for k, v := range request.Headers {
 		httpRequest.Header.Add(k, v)
@@ -36,5 +34,5 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		StatusCode: rr.StatusCode,
 		Body:       rr.Body,
 		Headers:    rr.Headers,
-	}, nil
+	}
 }
