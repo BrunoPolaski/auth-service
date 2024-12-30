@@ -22,6 +22,10 @@ func InitLogger() {
 }
 
 func Info(message string) {
+	if Logger == nil {
+		InitLogger()
+	}
+
 	if LogLevel == "info" || LogLevel == "" {
 		Logger.SetPrefix("INFO: ")
 		Logger.Println(message)
@@ -29,6 +33,10 @@ func Info(message string) {
 }
 
 func Warn(message string) {
+	if Logger == nil {
+		InitLogger()
+	}
+
 	if LogLevel == "warn" || LogLevel == "" {
 		Logger.SetPrefix("WARNING: ")
 		Logger.Println(message)
@@ -36,6 +44,10 @@ func Warn(message string) {
 }
 
 func Error(message string) {
+	if Logger == nil {
+		InitLogger()
+	}
+
 	if LogLevel == "error" || LogLevel == "" {
 		Logger.SetPrefix("ERROR: ")
 		Logger.Println(message)

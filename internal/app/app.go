@@ -4,14 +4,18 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
 	responseRecorder "github.com/BrunoPolaski/login-service/internal/controller/response_recorder"
 	"github.com/BrunoPolaski/login-service/internal/controller/routes"
 	"github.com/aws/aws-lambda-go/events"
 )
 
 func Handler(request events.APIGatewayProxyRequest) events.APIGatewayProxyResponse {
-	logger.InitLogger()
+	if request.Path == "" {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+			Body:       "Path cannot be empty",
+		}
+	}
 
 	router := routes.Init()
 

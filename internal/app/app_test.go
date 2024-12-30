@@ -6,12 +6,13 @@ import (
 	"testing"
 
 	"github.com/BrunoPolaski/login-service/internal/app"
+	"github.com/BrunoPolaski/login-service/internal/tests"
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/joho/godotenv"
 )
 
 func TestHandler(t *testing.T) {
-	godotenv.Load("../../.env")
+	t.Setenv("ENV", "dev")
+	t.Setenv("LOG_LEVEL", "info")
 	t.Run("should add query string parameters to request", func(t *testing.T) {
 		request := events.APIGatewayProxyRequest{
 			Path: "/",
@@ -28,15 +29,11 @@ func TestHandler(t *testing.T) {
 		}
 		httpRequest.URL.RawQuery = q.Encode()
 
-		if httpRequest.URL.RawQuery != "key=value" {
-			t.Errorf("Expected query string to be key=value, got %s", httpRequest.URL.RawQuery)
-		}
+		tests.AssertEqual(t, "key=value", httpRequest.URL.RawQuery)
 
 		response := app.Handler(request)
 
-		if response.StatusCode != 200 {
-			t.Errorf("Expected status code to be 200, got %d", response.StatusCode)
-		}
+		tests.AssertEqual(t, 200, response.StatusCode)
 	})
 
 	t.Run("should add request headers", func(t *testing.T) {
@@ -53,15 +50,11 @@ func TestHandler(t *testing.T) {
 			httpRequest.Header.Add(k, v)
 		}
 
-		if httpRequest.Header.Get("key") != "value" {
-			t.Errorf("Expected header key to be value, got %s", httpRequest.Header.Get("key"))
-		}
+		tests.AssertEqual(t, "value", httpRequest.Header.Get("key"))
 
 		response := app.Handler(request)
 
-		if response.StatusCode != 200 {
-			t.Errorf("Expected status code to be 200, got %d", response.StatusCode)
-		}
+		tests.AssertEqual(t, 200, response.StatusCode)
 	})
 
 	t.Run("should return response", func(t *testing.T) {
@@ -71,8 +64,14 @@ func TestHandler(t *testing.T) {
 
 		response := app.Handler(request)
 
-		if response.StatusCode != 200 {
-			t.Errorf("Expected status code to be 200, got %d", response.StatusCode)
-		}
+		tests.AssertEqual(t, 200, response.StatusCode)
+	})
+
+	t.Run("should return error when passing invalid request", func(t *testing.T) {
+		request := events.APIGatewayProxyRequest{}
+
+		response := app.Handler(request)
+
+		tests.AssertEqual(t, 400, response.StatusCode)
 	})
 }
