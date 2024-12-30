@@ -4,5 +4,5 @@ go 1.23.4
 
 require (
 	github.com/aws/aws-lambda-go v1.47.0
-	github.com/gorilla/mux v1.8.1 // indirect
+	github.com/gorilla/mux v1.8.1
 )
