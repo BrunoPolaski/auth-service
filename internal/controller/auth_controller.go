@@ -21,9 +21,11 @@ func NewAuthController() AuthController {
 }
 
 func (ac authController) SignIn(w http.ResponseWriter, r *http.Request) {
+	logger.Info("Authenticating user")
 	encoder := json.NewEncoder(w)
 	username, password, ok := r.BasicAuth()
 	if !ok {
+		logger.Error("Basic auth header not found")
 		w.WriteHeader(http.StatusUnauthorized)
 		encoder.Encode(map[string]string{
 			"error": "unauthorized",

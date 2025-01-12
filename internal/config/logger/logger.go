@@ -15,7 +15,7 @@ func InitLogger() {
 	if os.Getenv("LOG_LEVEL") != "" {
 		LogLevel = strings.ToLower(os.Getenv("LOG_LEVEL"))
 	} else {
-		LogLevel = "info"
+		LogLevel = ""
 	}
 
 	Logger = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)

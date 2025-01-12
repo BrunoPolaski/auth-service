@@ -31,7 +31,7 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "key=value", httpRequest.URL.RawQuery)
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
@@ -52,7 +52,7 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "value", httpRequest.Header.Get("key"))
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
@@ -62,7 +62,7 @@ func TestHandler(t *testing.T) {
 			Path: "/",
 		}
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
@@ -70,7 +70,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should return error when passing invalid request", func(t *testing.T) {
 		request := events.APIGatewayProxyRequest{}
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 400, response.StatusCode)
 	})
