@@ -1,10 +1,10 @@
 module github.com/BrunoPolaski/login-service
 
-go 1.23.4
+go 1.23
 
 require (
 	github.com/aws/aws-lambda-go v1.47.0
 	github.com/gorilla/mux v1.8.1
 )
 
-require github.com/joho/godotenv v1.5.1 // indirect
+require github.com/joho/godotenv v1.5.1

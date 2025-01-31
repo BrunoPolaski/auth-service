@@ -14,7 +14,7 @@ func TestHandler(t *testing.T) {
 	t.Setenv("ENV", "dev")
 	t.Setenv("LOG_LEVEL", "info")
 	t.Run("should add query string parameters to request", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 			QueryStringParameters: map[string]string{
 				"key": "value",
@@ -31,13 +31,13 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "key=value", httpRequest.URL.RawQuery)
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
 
 	t.Run("should add request headers", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 			Headers: map[string]string{
 				"key": "value",
@@ -52,25 +52,25 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "value", httpRequest.Header.Get("key"))
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
 
 	t.Run("should return response", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 		}
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 200, response.StatusCode)
 	})
 
 	t.Run("should return error when passing invalid request", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{}
+		request := &events.APIGatewayProxyRequest{}
 
-		response := app.Handler(request)
+		response, _ := app.Handler(request)
 
 		tests.AssertEqual(t, 400, response.StatusCode)
 	})
