@@ -14,7 +14,7 @@ func TestHandler(t *testing.T) {
 	t.Setenv("ENV", "dev")
 	t.Setenv("LOG_LEVEL", "info")
 	t.Run("should add query string parameters to request", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 			QueryStringParameters: map[string]string{
 				"key": "value",
@@ -37,7 +37,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should add request headers", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 			Headers: map[string]string{
 				"key": "value",
@@ -58,7 +58,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should return response", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{
+		request := &events.APIGatewayProxyRequest{
 			Path: "/",
 		}
 
@@ -68,7 +68,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should return error when passing invalid request", func(t *testing.T) {
-		request := events.APIGatewayProxyRequest{}
+		request := &events.APIGatewayProxyRequest{}
 
 		response, _ := app.Handler(request)
 
