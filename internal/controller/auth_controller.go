@@ -14,6 +14,7 @@ type AuthController interface {
 }
 
 type authController struct {
+	authService AuthService
 }
 
 func NewAuthController() AuthController {
