@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
+	"github.com/BrunoPolaski/login-service/internal/domain/service"
 )
 
 type AuthController interface {
@@ -14,9 +15,10 @@ type AuthController interface {
 }
 
 type authController struct {
+	authService service.AuthService
 }
 
-func NewAuthController() AuthController {
+func NewAuthController(service service.AuthService) AuthController {
 	return &authController{}
 }
 

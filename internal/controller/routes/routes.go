@@ -2,24 +2,29 @@ package routes
 
 import (
 	"net/http"
-	"os"
 
+	"github.com/BrunoPolaski/login-service/internal/config/database"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	controllerfactory "github.com/BrunoPolaski/login-service/internal/domain/factory/controller_factory"
+	"github.com/BrunoPolaski/login-service/internal/domain/factory"
 	"github.com/gorilla/mux"
 )
 
 func Init() *mux.Router {
 	logger.Info("Initializing routes")
 	r := mux.NewRouter()
-	authController := controllerfactory.GetAuthController()
 
-	r.HandleFunc("/signin", authController.SignIn).Methods(http.MethodPost)
+	databaseAdapter := database.PostgresAdapter{}
+	conn, err := databaseAdapter.Connect()
+	if err != nil {
+		panic(err)
+	}
 
-	if os.Getenv("ENV") == "dev" {
-		r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		}).Methods(http.MethodGet)
+	controllerFactory := factory.NewControllerFactory(conn)
+
+	authController := controllerFactory.GetAuthController()
+	auth := r.PathPrefix("/auth").Subrouter()
+	{
+		auth.HandleFunc("/signin", authController.SignIn).Methods(http.MethodPost)
 	}
 
 	return r
