@@ -1,3 +1,4 @@
 .env
 go.sum
 bootstrap
+/tmp

@@ -2,9 +2,12 @@ version: '3.8'
 
 services:
   auth-service:
-    build: .
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:3000
     volumes:
       - .:/app
     environment:
@@ -12,7 +15,6 @@ services:
       - LOG_LEVEL=
       - USERNAME=${USERNAME}
       - PASSWORD=${PASSWORD}
-    command: go run main.go
 
   postgres:
     image: postgres:13
