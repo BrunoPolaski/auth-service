@@ -5,7 +5,9 @@ import (
 
 	"github.com/BrunoPolaski/login-service/internal/config/database"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	"github.com/BrunoPolaski/login-service/internal/domain/factory"
+	"github.com/BrunoPolaski/login-service/internal/controller"
+	"github.com/BrunoPolaski/login-service/internal/domain/service"
+	"github.com/BrunoPolaski/login-service/internal/repository"
 	"github.com/gorilla/mux"
 )
 
@@ -19,9 +21,10 @@ func Init() *mux.Router {
 		panic(err)
 	}
 
-	controllerFactory := factory.NewControllerFactory(conn)
+	authRepository := repository.NewAuthRepository(conn)
+	authService := service.NewAuthService(authRepository)
+	authController := controller.NewAuthController(authService)
 
-	authController := controllerFactory.GetAuthController()
 	auth := r.PathPrefix("/auth").Subrouter()
 	{
 		auth.HandleFunc("/signin", authController.SignIn).Methods(http.MethodPost)

@@ -16,4 +16,6 @@ func NewAuthService(authRepository repository.AuthRepository) AuthService {
 	}
 }
 
-func (as *authService) SignIn(username, password string) (string, error)
+func (as *authService) SignIn(username, password string) (string, error) {
+	return "", nil
+}

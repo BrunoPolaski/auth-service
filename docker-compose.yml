@@ -10,8 +10,6 @@ services:
     environment:
       - ENV=${ENV}
       - LOG_LEVEL=
-      - USERNAME=${USERNAME}
-      - PASSWORD=${PASSWORD}
     command: go run main.go
 
   postgres:

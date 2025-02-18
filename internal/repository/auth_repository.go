@@ -3,7 +3,7 @@ package repository
 import "database/sql"
 
 type AuthRepository interface {
-	SignIn(username, password string) error
+	FindUserByEmail(username, password string) error
 }
 
 type authRepository struct {
