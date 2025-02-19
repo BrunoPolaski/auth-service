@@ -16,6 +16,6 @@ func NewAuthRepository(db *sql.DB) AuthRepository {
 	}
 }
 
-func (ar authRepository) SignIn(username, password string) error {
+func (ar authRepository) FindUserByEmail(username, password string) error {
 	return nil
 }

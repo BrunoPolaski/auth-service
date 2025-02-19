@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 type PostgresAdapter struct{}
@@ -23,7 +25,7 @@ func (pa *PostgresAdapter) Connect() (*sql.DB, error) {
 		),
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = conn.Ping()

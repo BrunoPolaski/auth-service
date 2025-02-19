@@ -2,15 +2,21 @@ version: '3.8'
 
 services:
   auth-service:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - .:/app
     environment:
-      - ENV=${ENV}
-      - LOG_LEVEL=
-    command: go run main.go
+      ENV: ${ENV}
+      LOG_LEVEL: ${LOG_LEVEL}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:13

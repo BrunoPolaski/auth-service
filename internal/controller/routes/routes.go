@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/BrunoPolaski/login-service/internal/config/database"
@@ -12,10 +13,16 @@ import (
 )
 
 func Init() *mux.Router {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(fmt.Sprintf("Failed to initialize routes: %v", r))
+		}
+	}()
+
 	logger.Info("Initializing routes")
 	r := mux.NewRouter()
 
-	databaseAdapter := database.PostgresAdapter{}
+	databaseAdapter := &database.PostgresAdapter{}
 	conn, err := databaseAdapter.Connect()
 	if err != nil {
 		panic(err)
