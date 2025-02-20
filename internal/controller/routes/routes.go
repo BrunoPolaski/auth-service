@@ -22,13 +22,9 @@ func Init() *mux.Router {
 	logger.Info("Initializing routes")
 	r := mux.NewRouter()
 
-	databaseAdapter := &database.PostgresAdapter{}
-	conn, err := databaseAdapter.Connect()
-	if err != nil {
-		panic(err)
-	}
+	var databaseAdapter database.Database = &database.PostgresAdapter{}
 
-	authRepository := repository.NewAuthRepository(conn)
+	authRepository := repository.NewAuthRepository(databaseAdapter)
 	authService := service.NewAuthService(authRepository)
 	authController := controller.NewAuthController(authService)
 

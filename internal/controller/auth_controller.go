@@ -23,7 +23,9 @@ func NewAuthController(service service.AuthService) AuthController {
 	}
 }
 
-func (ac authController) SignIn(w http.ResponseWriter, r *http.Request) {
+func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+
 	logger.Info("Authenticating user")
 	username, password, ok := r.BasicAuth()
 	if !ok {
@@ -35,14 +37,15 @@ func (ac authController) SignIn(w http.ResponseWriter, r *http.Request) {
 	token, err := ac.authService.SignIn(username, password)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Error signing in user: %s", err.Error()))
-		http.Error(w, "Error signing in user", http.StatusUnauthorized)
+		encoder.Encode(map[string]string{
+			"error": err.Error(),
+		})
+		return
 	}
-
-	encoder := json.NewEncoder(w)
 
 	encoder.Encode(map[string]string{
 		"token": token,
 	})
 
-	w.WriteHeader(http.StatusOK)
+	logger.Info("User authenticated")
 }

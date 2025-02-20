@@ -32,3 +32,7 @@ func (pa *PostgresAdapter) Connect() (*sql.DB, error) {
 
 	return conn, err
 }
+
+func (pa *PostgresAdapter) Close(conn *sql.DB) error {
+	return conn.Close()
+}

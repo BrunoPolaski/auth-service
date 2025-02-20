@@ -1,9 +1,12 @@
 package service
 
-import "github.com/BrunoPolaski/login-service/internal/repository"
+import (
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/login-service/internal/repository"
+)
 
 type AuthService interface {
-	SignIn(username, password string) (string, error)
+	SignIn(username, password string) (string, *rest_err.RestErr)
 }
 
 type authService struct {
@@ -16,6 +19,6 @@ func NewAuthService(authRepository repository.AuthRepository) AuthService {
 	}
 }
 
-func (as *authService) SignIn(username, password string) (string, error) {
-	return "", nil
+func (as *authService) SignIn(username, password string) (string, *rest_err.RestErr) {
+	return "", rest_err.NewNotFoundError("not implemented")
 }

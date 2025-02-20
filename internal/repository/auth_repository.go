@@ -1,21 +1,24 @@
 package repository
 
-import "database/sql"
+import (
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/login-service/internal/config/database"
+)
 
 type AuthRepository interface {
-	FindUserByEmail(username, password string) error
+	FindUserByEmail(username, password string) *rest_err.RestErr
 }
 
 type authRepository struct {
-	database *sql.DB
+	database database.Database
 }
 
-func NewAuthRepository(db *sql.DB) AuthRepository {
+func NewAuthRepository(db database.Database) AuthRepository {
 	return &authRepository{
 		database: db,
 	}
 }
 
-func (ar authRepository) FindUserByEmail(username, password string) error {
+func (ar authRepository) FindUserByEmail(username, password string) *rest_err.RestErr {
 	return nil
 }
