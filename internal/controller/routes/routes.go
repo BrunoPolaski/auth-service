@@ -8,6 +8,7 @@ import (
 	"github.com/BrunoPolaski/login-service/internal/config/database"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
 	"github.com/BrunoPolaski/login-service/internal/controller"
+	"github.com/BrunoPolaski/login-service/internal/controller/middleware"
 	"github.com/BrunoPolaski/login-service/internal/domain/service"
 	"github.com/BrunoPolaski/login-service/internal/repository"
 )
@@ -20,7 +21,6 @@ func Init() *http.ServeMux {
 	}()
 
 	logger.Info("Initializing routes")
-	r := http.NewServeMux()
 
 	var databaseAdapter database.Database = database.NewPostgresAdapter()
 	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
@@ -32,7 +32,24 @@ func Init() *http.ServeMux {
 	)
 	authController := controller.NewAuthController(authService)
 
-	r.HandleFunc("POST /auth", authController.SignIn)
+	r := http.NewServeMux()
+	{
+		r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
 
-	return r
+		r.Handle("/", http.NotFoundHandler())
+	}
+
+	auth := http.NewServeMux()
+	{
+		auth.HandleFunc("/auth/signin", authController.SignIn)
+		auth.Handle("/auth/", http.StripPrefix("/auth", r))
+	}
+
+	stack := middleware.CreateStack(
+		middleware.LoggingMiddleware,
+	)
+
+	return server
 }
