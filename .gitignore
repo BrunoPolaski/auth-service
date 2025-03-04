@@ -1,4 +1,4 @@
 .env
 go.sum
 bootstrap
-bootstrap.zip
+/tmp

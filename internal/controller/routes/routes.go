@@ -1,26 +1,38 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
-	"os"
 
+	"github.com/BrunoPolaski/login-service/internal/config/crypto"
+	"github.com/BrunoPolaski/login-service/internal/config/database"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	controllerfactory "github.com/BrunoPolaski/login-service/internal/domain/factory/controller_factory"
-	"github.com/gorilla/mux"
+	"github.com/BrunoPolaski/login-service/internal/controller"
+	"github.com/BrunoPolaski/login-service/internal/domain/service"
+	"github.com/BrunoPolaski/login-service/internal/repository"
 )
 
-func Init() *mux.Router {
+func Init() *http.ServeMux {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(fmt.Sprintf("Failed to initialize routes: %v", r))
+		}
+	}()
+
 	logger.Info("Initializing routes")
-	r := mux.NewRouter()
-	authController := controllerfactory.GetAuthController()
+	r := http.NewServeMux()
 
-	r.HandleFunc("/signin", authController.SignIn).Methods(http.MethodPost)
+	var databaseAdapter database.Database = database.NewPostgresAdapter()
+	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
 
-	if os.Getenv("ENV") == "dev" {
-		r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		}).Methods(http.MethodGet)
-	}
+	authRepository := repository.NewAuthRepository(databaseAdapter)
+	authService := service.NewAuthService(
+		authRepository,
+		cryptoAdapter,
+	)
+	authController := controller.NewAuthController(authService)
+
+	r.HandleFunc("POST /auth", authController.SignIn)
 
 	return r
 }
