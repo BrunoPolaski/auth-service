@@ -9,14 +9,6 @@ services:
       - "8080:8080"
     env_file:
       - .env
-    environment:
-      ENV: ${ENV}
-      LOG_LEVEL: ${LOG_LEVEL}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: postgres
-      DB_NAME: ${DB_NAME}
-      DB_PORT: ${DB_PORT}
     depends_on:
       postgres:
         condition: service_healthy

@@ -2,10 +2,7 @@ module github.com/BrunoPolaski/login-service
 
 go 1.23
 
-require (
-	github.com/aws/aws-lambda-go v1.47.0
-	github.com/gorilla/mux v1.8.1
-)
+require github.com/aws/aws-lambda-go v1.47.0
 
 require (
 	github.com/BrunoPolaski/go-crud v0.0.0-20240815175617-ba15e7aa3931

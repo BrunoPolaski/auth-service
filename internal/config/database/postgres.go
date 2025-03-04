@@ -8,9 +8,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type PostgresAdapter struct{}
+type postgresAdapter struct{}
 
-func (pa *PostgresAdapter) Connect() (*sql.DB, error) {
+func NewPostgresAdapter() *postgresAdapter {
+	return &postgresAdapter{}
+}
+
+func (pa *postgresAdapter) Connect() (*sql.DB, error) {
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
@@ -33,6 +37,6 @@ func (pa *PostgresAdapter) Connect() (*sql.DB, error) {
 	return conn, err
 }
 
-func (pa *PostgresAdapter) Close(conn *sql.DB) error {
+func (pa *postgresAdapter) Close(conn *sql.DB) error {
 	return conn.Close()
 }

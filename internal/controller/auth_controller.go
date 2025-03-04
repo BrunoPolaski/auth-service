@@ -2,9 +2,9 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
 	"github.com/BrunoPolaski/login-service/internal/domain/service"
 )
@@ -29,17 +29,18 @@ func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
 	logger.Info("Authenticating user")
 	username, password, ok := r.BasicAuth()
 	if !ok {
-		logger.Error("Basic auth header not found")
-		http.Error(w, "Basic auth header not found", http.StatusUnauthorized)
+		httpErr := rest_err.NewUnauthorizedError("Basic auth header not found")
+		logger.Error(httpErr.Message)
+		w.WriteHeader(httpErr.Code)
+		encoder.Encode(httpErr)
 		return
 	}
 
 	token, err := ac.authService.SignIn(username, password)
 	if err != nil {
-		logger.Error(fmt.Sprintf("Error signing in user: %s", err.Error()))
-		encoder.Encode(map[string]string{
-			"error": err.Error(),
-		})
+		logger.Error(err.Message)
+		w.WriteHeader(err.Code)
+		encoder.Encode(err)
 		return
 	}
 

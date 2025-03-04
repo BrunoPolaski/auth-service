@@ -1,14 +1,17 @@
 package crypto
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"golang.org/x/crypto/bcrypt"
+)
 
-type Bcrypt struct{}
+type bcryptAdapter struct{}
 
-func NewBcrypt() *Bcrypt {
-	return &Bcrypt{}
+func NewBcryptAdapter() *bcryptAdapter {
+	return &bcryptAdapter{}
 }
 
-func (b *Bcrypt) Hash(password string) (string, error) {
+func (b *bcryptAdapter) EncryptPassword(password string) (string, *rest_err.RestErr) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", nil
@@ -17,6 +20,10 @@ func (b *Bcrypt) Hash(password string) (string, error) {
 	return string(hash), nil
 }
 
-func (b *Bcrypt) ComparePasswords(hashPassword, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(password))
+func (b *bcryptAdapter) ComparePasswords(hashPassword, password string) *rest_err.RestErr {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(password)); err != nil {
+		return rest_err.NewUnauthorizedError("invalid password")
+	}
+
+	return nil
 }
