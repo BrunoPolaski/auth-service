@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/BrunoPolaski/login-service/internal/app"
@@ -22,7 +23,12 @@ func main() {
 	if os.Getenv("ENV") == "local" {
 		r := routes.Init()
 
-		log.Fatal(r.ListenAndServe())
+		server := &http.Server{
+			Addr:    ":8080",
+			Handler: r,
+		}
+
+		log.Fatal(server.ListenAndServe())
 	}
 
 	lambda.Start(app.Handler)

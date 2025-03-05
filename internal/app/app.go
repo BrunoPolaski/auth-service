@@ -10,12 +10,16 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
+var router http.Handler
+
+func init() {
+	router = routes.Init()
+}
+
 func Handler(request *events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	if request.Path == "" {
 		return nil, fmt.Errorf("path is required")
 	}
-
-	router := routes.Init()
 
 	httpRequest, err := http.NewRequest(request.HTTPMethod, request.Path, strings.NewReader(request.Body))
 	if err != nil {
