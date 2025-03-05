@@ -1,6 +1,9 @@
 package tests
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func AssertEqual(t *testing.T, expected interface{}, actual interface{}) {
 	if expected != actual {
@@ -15,7 +18,11 @@ func AssertNotEqual(t *testing.T, expected interface{}, actual interface{}) {
 }
 
 func AssertNil(t *testing.T, actual interface{}) {
-	if actual != nil {
+	isInterfaceNil := func(i interface{}) bool {
+		return i == nil || (reflect.ValueOf(i).Kind() == reflect.Ptr && reflect.ValueOf(i).IsNil())
+	}
+
+	if actual != nil && !isInterfaceNil(actual) {
 		t.Errorf("\nExpected: nil \nGot: %v", actual)
 	}
 }

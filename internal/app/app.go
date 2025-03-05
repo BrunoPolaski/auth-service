@@ -1,10 +1,10 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 	responseRecorder "github.com/BrunoPolaski/login-service/internal/controller/response_recorder"
 	"github.com/BrunoPolaski/login-service/internal/controller/routes"
 	"github.com/aws/aws-lambda-go/events"
@@ -16,14 +16,14 @@ func init() {
 	router = routes.Init()
 }
 
-func Handler(request *events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-	if request.Path == "" {
-		return nil, fmt.Errorf("path is required")
+func Handler(request *events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, *rest_err.RestErr) {
+	if request == nil || request.Path == "" {
+		return nil, rest_err.NewBadRequestError("Path is required")
 	}
 
 	httpRequest, err := http.NewRequest(request.HTTPMethod, request.Path, strings.NewReader(request.Body))
 	if err != nil {
-		return nil, err
+		return nil, rest_err.NewInternalServerError(err.Error())
 	}
 
 	for k, v := range request.Headers {

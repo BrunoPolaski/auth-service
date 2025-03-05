@@ -15,7 +15,7 @@ func TestHandler(t *testing.T) {
 	t.Setenv("LOG_LEVEL", "info")
 	t.Run("should add query string parameters to request", func(t *testing.T) {
 		request := &events.APIGatewayProxyRequest{
-			Path: "/",
+			Path: "/health",
 			QueryStringParameters: map[string]string{
 				"key": "value",
 			},
@@ -31,14 +31,15 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "key=value", httpRequest.URL.RawQuery)
 
-		response, _ := app.Handler(request)
+		response, err := app.Handler(request)
 
-		tests.AssertEqual(t, 200, response.StatusCode)
+		tests.AssertNil(t, err)
+		tests.AssertEqual(t, http.StatusOK, response.StatusCode)
 	})
 
 	t.Run("should add request headers", func(t *testing.T) {
 		request := &events.APIGatewayProxyRequest{
-			Path: "/",
+			Path: "/health",
 			Headers: map[string]string{
 				"key": "value",
 			},
@@ -52,26 +53,31 @@ func TestHandler(t *testing.T) {
 
 		tests.AssertEqual(t, "value", httpRequest.Header.Get("key"))
 
-		response, _ := app.Handler(request)
+		response, err := app.Handler(request)
 
-		tests.AssertEqual(t, 200, response.StatusCode)
+		tests.AssertNil(t, err)
+		tests.AssertEqual(t, http.StatusOK, response.StatusCode)
 	})
 
 	t.Run("should return response", func(t *testing.T) {
 		request := &events.APIGatewayProxyRequest{
-			Path: "/",
+			Path: "/health",
 		}
 
-		response, _ := app.Handler(request)
+		response, err := app.Handler(request)
 
-		tests.AssertEqual(t, 200, response.StatusCode)
+		tests.AssertNil(t, err)
+		tests.AssertEqual(t, http.StatusOK, response.StatusCode)
 	})
 
 	t.Run("should return error when passing invalid request", func(t *testing.T) {
 		request := &events.APIGatewayProxyRequest{}
 
-		response, _ := app.Handler(request)
+		response, err := app.Handler(request)
 
-		tests.AssertEqual(t, 400, response.StatusCode)
+		tests.AssertEqual(t, http.StatusBadRequest, err.Code)
+		tests.AssertEqual(t, "Path is required", err.Message)
+		tests.AssertNotNil(t, err)
+		tests.AssertNil(t, response)
 	})
 }
