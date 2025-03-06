@@ -6,6 +6,7 @@ import (
 
 	"github.com/BrunoPolaski/login-service/internal/config/crypto"
 	"github.com/BrunoPolaski/login-service/internal/config/database"
+	"github.com/BrunoPolaski/login-service/internal/config/jwt"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
 	"github.com/BrunoPolaski/login-service/internal/controller"
 	"github.com/BrunoPolaski/login-service/internal/controller/middleware"
@@ -24,6 +25,7 @@ func Init() http.Handler {
 
 	var databaseAdapter database.Database = database.NewPostgresAdapter()
 	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
+	var jwtAdapter jwt.JWT = jwt.NewJWTAdapter()
 
 	authRepository := repository.NewAuthRepository(databaseAdapter)
 	authService := service.NewAuthService(
@@ -45,6 +47,7 @@ func Init() http.Handler {
 
 	stack := middleware.CreateStack(
 		middleware.LoggingMiddleware,
+		middleware.BearerMiddleware(jwtAdapter),
 	)
 
 	return stack(r)
