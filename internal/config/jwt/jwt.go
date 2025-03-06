@@ -6,6 +6,6 @@ import (
 )
 
 type JWT interface {
-	GenerateToken(claims jwt.MapClaims) (string, *rest_err.RestErr)
-	ParseToken(token string) (interface{}, *rest_err.RestErr)
+	GenerateToken(uid string) (string, *rest_err.RestErr)
+	ParseToken(token string) (*jwt.Token, *rest_err.RestErr)
 }
