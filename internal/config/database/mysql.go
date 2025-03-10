@@ -14,9 +14,13 @@ var (
 	dbPassword = os.Getenv("DB_PASSWORD")
 )
 
-type MySQLAdapter struct{}
+type mySQLAdapter struct{}
 
-func (m MySQLAdapter) Connection() (*sql.DB, error) {
+func NewMySQLAdapter() Database {
+	return &mySQLAdapter{}
+}
+
+func (m *mySQLAdapter) Connect() (*sql.DB, error) {
 	conn, err := sql.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=auth-service sslmode=disable", dbHost, dbUser, dbPassword))
 	if err != nil {
 		panic(err)

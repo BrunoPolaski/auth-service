@@ -23,9 +23,14 @@ func Init() http.Handler {
 
 	logger.Info("Initializing routes")
 
-	var databaseAdapter database.Database = database.NewPostgresAdapter()
-	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
-	var jwtAdapter jwt.JWT = jwt.NewJWTAdapter()
+	var (
+		cryptoAdapter   crypto.Crypto     = crypto.NewBcryptAdapter()
+		databaseAdapter database.Database = database.NewPostgresAdapter()
+		jwtAdapter      jwt.JWT           = jwt.NewJWTAdapter()
+
+		loggingMiddleware middleware.Middleware = middleware.LoggingMiddleware
+		bearerMiddleware  middleware.Middleware = middleware.BearerMiddleware(jwtAdapter)
+	)
 
 	authRepository := repository.NewAuthRepository(databaseAdapter)
 	authService := service.NewAuthService(
@@ -45,10 +50,5 @@ func Init() http.Handler {
 		r.Handle("/", http.NotFoundHandler())
 	}
 
-	stack := middleware.CreateStack(
-		middleware.LoggingMiddleware,
-		middleware.BearerMiddleware(jwtAdapter),
-	)
-
-	return stack(r)
+	return loggingMiddleware(r)
 }
