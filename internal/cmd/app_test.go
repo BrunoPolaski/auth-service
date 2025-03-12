@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/BrunoPolaski/login-service/internal/app"
+	app "github.com/BrunoPolaski/login-service/internal/cmd"
 	"github.com/BrunoPolaski/login-service/internal/tests"
 	"github.com/aws/aws-lambda-go/events"
 )

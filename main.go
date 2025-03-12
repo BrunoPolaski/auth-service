@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/BrunoPolaski/login-service/internal/app"
+	app "github.com/BrunoPolaski/login-service/internal/cmd"
 	"github.com/BrunoPolaski/login-service/internal/config/logger"
 	"github.com/BrunoPolaski/login-service/internal/controller/routes"
 	"github.com/aws/aws-lambda-go/lambda"

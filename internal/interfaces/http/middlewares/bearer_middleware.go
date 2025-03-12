@@ -1,4 +1,4 @@
-package middleware
+package middlewares
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/config/jwt"
+	"github.com/BrunoPolaski/login-service/internal/thirdparty/jwt"
 )
 
 func BearerMiddleware(jwtAdapter jwt.JWT) Middleware {

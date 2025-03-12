@@ -1,11 +1,11 @@
-package middleware
+package middlewares
 
 import (
 	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
+	"github.com/BrunoPolaski/login-service/internal/thirdparty/logger"
 )
 
 func LoggingMiddleware(next http.Handler) http.Handler {

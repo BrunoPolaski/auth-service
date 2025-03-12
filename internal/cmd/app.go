@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	responseRecorder "github.com/BrunoPolaski/login-service/internal/controller/response_recorder"
-	"github.com/BrunoPolaski/login-service/internal/controller/routes"
+	internalHttp "github.com/BrunoPolaski/login-service/internal/interfaces/http"
+	"github.com/BrunoPolaski/login-service/internal/interfaces/http/routes"
 	"github.com/aws/aws-lambda-go/events"
 )
 
@@ -36,7 +36,7 @@ func Handler(request *events.APIGatewayProxyRequest) (*events.APIGatewayProxyRes
 	}
 	httpRequest.URL.RawQuery = q.Encode()
 
-	rr := responseRecorder.NewResponseRecorder()
+	rr := internalHttp.NewResponseRecorder()
 	router.ServeHTTP(rr, httpRequest)
 
 	rr.Headers["Content-Type"] = "application/json"

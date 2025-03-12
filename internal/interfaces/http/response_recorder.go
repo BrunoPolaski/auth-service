@@ -1,4 +1,4 @@
-package responserecorder
+package http
 
 import "net/http"
 
