@@ -1,8 +1,8 @@
-package repository
+package repositories
 
 import (
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/database"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/database"
 )
 
 type AuthRepository interface {

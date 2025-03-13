@@ -1,9 +1,9 @@
-package service
+package services
 
 import (
+	repository "github.com/BrunoPolaski/auth-service/internal/infra/repositories"
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/crypto"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/repository"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/crypto"
 )
 
 type AuthService interface {

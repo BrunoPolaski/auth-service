@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/BrunoPolaski/login-service/internal/domain/service"
-	"github.com/BrunoPolaski/login-service/internal/interfaces/http/controllers"
-	"github.com/BrunoPolaski/login-service/internal/interfaces/http/middlewares"
-	"github.com/BrunoPolaski/login-service/internal/repository"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/crypto"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/database"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/jwt"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/logger"
+	"github.com/BrunoPolaski/auth-service/internal/application/services"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
+	"github.com/BrunoPolaski/auth-service/internal/infra/repositories"
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/crypto"
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/database"
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/jwt"
+	"github.com/BrunoPolaski/auth-service/internal/interfaces/http/controllers"
+	"github.com/BrunoPolaski/auth-service/internal/interfaces/http/middlewares"
 )
 
 func Init() http.Handler {
@@ -23,27 +23,25 @@ func Init() http.Handler {
 
 	logger.Info("Initializing routes")
 
-	var (
-		bcryptAdapter   crypto.Crypto     = crypto.NewBcryptAdapter()
-		postgresAdapter database.Database = database.NewPostgresAdapter()
-		jwtAdapter      jwt.JWT           = jwt.NewJWTAdapter()
+	bcryptAdapter := crypto.NewBcryptAdapter()
+	postgresAdapter := database.NewPostgresAdapter()
+	jwtAdapter := jwt.NewJWTAdapter()
 
-		loggingMiddleware    middlewares.Middleware = middlewares.LoggingMiddleware
-		bearerAuthMiddleware middlewares.Middleware = middlewares.BearerMiddleware(jwtAdapter)
-		basicAuthMiddleware  middlewares.Middleware = middlewares.BasicMiddleware
-	)
+	loggingMiddleware := middlewares.LoggingMiddleware
+	bearerAuthMiddleware := middlewares.BearerMiddleware(jwtAdapter)
+	basicAuthMiddleware := middlewares.BasicMiddleware
 
-	authRepository := repository.NewAuthRepository(postgresAdapter)
-	authService := service.NewAuthService(
-		authRepository,
-		bcryptAdapter,
+	authController := controllers.NewAuthController(
+		services.NewAuthService(
+			repositories.NewAuthRepository(postgresAdapter),
+			bcryptAdapter,
+		),
 	)
-	authController := controllers.NewAuthController(authService)
 
 	r := http.NewServeMux()
 	{
-		r.Handle("/auth/signin", middlewares.CreateStack([]middlewares.Middleware{basicAuthMiddleware}, http.HandlerFunc(authController.SignIn)))
-		r.Handle("/auth/refresh-token", middlewares.CreateStack([]middlewares.Middleware{bearerAuthMiddleware}, http.HandlerFunc(authController.RefreshToken)))
+		r.Handle("/auth/signin", basicAuthMiddleware(http.HandlerFunc(authController.SignIn)))
+		r.Handle("/auth/refresh-token", bearerAuthMiddleware(http.HandlerFunc(authController.RefreshToken)))
 
 		r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)

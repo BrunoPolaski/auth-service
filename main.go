@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	app "github.com/BrunoPolaski/login-service/internal/cmd"
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	"github.com/BrunoPolaski/login-service/internal/controller/routes"
+	app "github.com/BrunoPolaski/auth-service/internal/cmd"
+	"github.com/BrunoPolaski/auth-service/internal/interfaces/http/routes"
+	"github.com/BrunoPolaski/auth-service/internal/thirdparty/logger"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 )

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	internalHttp "github.com/BrunoPolaski/login-service/internal/interfaces/http"
-	"github.com/BrunoPolaski/login-service/internal/interfaces/http/routes"
+	internalHttp "github.com/BrunoPolaski/auth-service/internal/interfaces/http"
+	"github.com/BrunoPolaski/auth-service/internal/interfaces/http/routes"
 	"github.com/aws/aws-lambda-go/events"
 )
 

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/BrunoPolaski/auth-service/internal/application/services"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	"github.com/BrunoPolaski/login-service/internal/domain/service"
 )
 
 type AuthController interface {
@@ -18,10 +18,10 @@ type AuthController interface {
 }
 
 type authController struct {
-	authService service.AuthService
+	authService services.AuthService
 }
 
-func NewAuthController(service service.AuthService) AuthController {
+func NewAuthController(service services.AuthService) AuthController {
 	return &authController{
 		authService: service,
 	}
@@ -73,4 +73,10 @@ func (ac *authController) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	})
 
 	logger.Info("Token refreshed")
+}
+
+func (ac *authController) SignUp(w http.ResponseWriter, r *http.Request) {
+	encoder := json.NewEncoder(w)
+
+	logger.Info("Creating user")
 }

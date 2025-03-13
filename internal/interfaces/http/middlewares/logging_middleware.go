@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/logger"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 )
 
 func LoggingMiddleware(next http.Handler) http.Handler {

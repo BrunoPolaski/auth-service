@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/BrunoPolaski/auth-service/internal/infra/thirdparty/jwt"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/thirdparty/jwt"
 )
 
 func BearerMiddleware(jwtAdapter jwt.JWT) Middleware {

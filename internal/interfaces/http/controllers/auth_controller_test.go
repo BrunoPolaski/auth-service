@@ -6,8 +6,8 @@ package controllers_test
 // 	"strings"
 // 	"testing"
 
-// 	"github.com/BrunoPolaski/login-service/internal/controller"
-// 	"github.com/BrunoPolaski/login-service/internal/tests"
+// 	"github.com/BrunoPolaski/auth-service/internal/controller"
+// 	"github.com/BrunoPolaski/auth-service/internal/tests"
 // )
 
 // func TestSignin(t *testing.T) {
