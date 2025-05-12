@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	app "github.com/BrunoPolaski/auth-service/internal/cmd"
+	"github.com/BrunoPolaski/auth-service/internal/cmd"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 	"github.com/BrunoPolaski/auth-service/internal/interfaces/http/routes"
-	"github.com/BrunoPolaski/auth-service/internal/thirdparty/logger"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 )
@@ -31,5 +31,5 @@ func main() {
 		log.Fatal(server.ListenAndServe())
 	}
 
-	lambda.Start(app.Handler)
+	lambda.Start(cmd.Handler)
 }

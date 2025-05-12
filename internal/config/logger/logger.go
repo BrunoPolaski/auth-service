@@ -14,16 +14,16 @@ func InitLogger() {
 }
 
 func Info(message string) {
-	logger.SetPrefix("INFO: ")
+	logger.SetPrefix("[INFO] ")
 	logger.Println(message)
 }
 
 func Warn(message string) {
-	logger.SetPrefix("WARNING: ")
+	logger.SetPrefix("[WARNING] ")
 	logger.Println(message)
 }
 
 func Error(message string) {
-	logger.SetPrefix("ERROR: ")
+	logger.SetPrefix("[ERROR] ")
 	logger.Println(message)
 }
