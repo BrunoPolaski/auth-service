@@ -47,6 +47,4 @@ func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
 	encoder.Encode(map[string]string{
 		"token": token,
 	})
-
-	logger.Info("User authenticated")
 }
