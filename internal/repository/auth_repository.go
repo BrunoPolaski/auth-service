@@ -1,24 +1,40 @@
 package repository
 
 import (
+	"database/sql"
+	"fmt"
+
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/config/database"
+	"github.com/BrunoPolaski/login-service/internal/domain/entity"
 )
 
 type AuthRepository interface {
-	FindUserByEmail(username, password string) *rest_err.RestErr
+	FindUserByEmail(username, password string) (*entity.User, *rest_err.RestErr)
 }
 
 type authRepository struct {
-	database database.Database
+	database *sql.DB
 }
 
-func NewAuthRepository(db database.Database) AuthRepository {
+func NewAuthRepository(db *sql.DB) AuthRepository {
 	return &authRepository{
 		database: db,
 	}
 }
 
-func (ar authRepository) FindUserByEmail(username, password string) *rest_err.RestErr {
-	return nil
+func (ar *authRepository) FindUserByEmail(username, password string) (*entity.User, *rest_err.RestErr) {
+	user := &entity.User{}
+
+	stmt, _ := ar.database.Prepare("SELECT * FROM users WHERE email = $1")
+	defer stmt.Close()
+
+	err := ar.database.QueryRow(username).Scan(&user)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, rest_err.NewNotFoundError("User not found")
+		}
+		return nil, rest_err.NewInternalServerError(fmt.Sprintf("Error while trying to find user: %v", err.Error()))
+	}
+
+	return user, nil
 }

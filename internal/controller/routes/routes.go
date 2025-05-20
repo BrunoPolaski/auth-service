@@ -19,13 +19,18 @@ func Init() *http.ServeMux {
 		}
 	}()
 
-	logger.Info("Initializing routes")
 	r := http.NewServeMux()
 
 	var databaseAdapter database.Database = database.NewPostgresAdapter()
 	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
 
-	authRepository := repository.NewAuthRepository(databaseAdapter)
+	conn, err := databaseAdapter.Connect()
+	if err != nil {
+		logger.Error(fmt.Sprintf("Failed to connect to database: %v", err))
+		return nil
+	}
+
+	authRepository := repository.NewAuthRepository(conn)
 	authService := service.NewAuthService(
 		authRepository,
 		cryptoAdapter,
