@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	controller "github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
-	repository "github.com/BrunoPolaski/auth-service/internal/adapters/mysql"
-	service "github.com/BrunoPolaski/auth-service/internal/adapters/services"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
 	"github.com/BrunoPolaski/auth-service/internal/config/database"
 	"github.com/BrunoPolaski/auth-service/internal/config/logger"
@@ -30,12 +30,12 @@ func Init() *http.ServeMux {
 		return nil
 	}
 
-	authRepository := repository.NewAuthRepository(conn)
-	authService := service.NewAuthService(
+	authRepository := mysql.NewAuthRepository(conn)
+	authService := services.NewAuthService(
 		authRepository,
 		cryptoAdapter,
 	)
-	authController := controller.NewAuthController(authService)
+	authController := controllers.NewAuthController(authService)
 
 	r.HandleFunc("POST /auth", authController.SignIn)
 
