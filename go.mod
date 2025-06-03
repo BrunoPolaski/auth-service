@@ -1,4 +1,4 @@
-module github.com/BrunoPolaski/login-service
+module github.com/BrunoPolaski/auth-service
 
 go 1.24
 

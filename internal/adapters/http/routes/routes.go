@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/BrunoPolaski/login-service/internal/config/crypto"
-	"github.com/BrunoPolaski/login-service/internal/config/database"
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	"github.com/BrunoPolaski/login-service/internal/controller"
-	"github.com/BrunoPolaski/login-service/internal/domain/service"
-	"github.com/BrunoPolaski/login-service/internal/repository"
+	controller "github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
+	repository "github.com/BrunoPolaski/auth-service/internal/adapters/mysql"
+	service "github.com/BrunoPolaski/auth-service/internal/adapters/services"
+	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
+	"github.com/BrunoPolaski/auth-service/internal/config/database"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 )
 
 func Init() *http.ServeMux {
