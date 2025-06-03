@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	service "github.com/BrunoPolaski/auth-service/internal/adapters/services"
+	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/config/logger"
-	"github.com/BrunoPolaski/login-service/internal/domain/service"
 )
 
 type AuthController interface {

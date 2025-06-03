@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	entity "github.com/BrunoPolaski/auth-service/internal/domain/entities"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
-	"github.com/BrunoPolaski/login-service/internal/domain/entity"
 )
 
 type AuthRepository interface {
