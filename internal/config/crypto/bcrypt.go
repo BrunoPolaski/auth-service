@@ -1,7 +1,7 @@
 package crypto
 
 import (
-	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/go-rest-err/rest_err"
 	"golang.org/x/crypto/bcrypt"
 )
 

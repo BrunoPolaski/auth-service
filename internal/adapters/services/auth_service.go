@@ -3,7 +3,7 @@ package services
 import (
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
 	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
-	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
 type AuthService interface {
