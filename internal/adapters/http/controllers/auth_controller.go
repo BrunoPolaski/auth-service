@@ -1,10 +1,10 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
 	"net/http"
 
-	service "github.com/BrunoPolaski/auth-service/internal/adapters/services"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 )
@@ -14,10 +14,10 @@ type AuthController interface {
 }
 
 type authController struct {
-	authService service.AuthService
+	authService services.AuthService
 }
 
-func NewAuthController(service service.AuthService) AuthController {
+func NewAuthController(service services.AuthService) AuthController {
 	return &authController{
 		authService: service,
 	}

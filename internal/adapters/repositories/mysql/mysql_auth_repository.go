@@ -1,15 +1,15 @@
-package repository
+package mysql
 
 import (
 	"database/sql"
 	"fmt"
 
-	entity "github.com/BrunoPolaski/auth-service/internal/domain/entities"
+	"github.com/BrunoPolaski/auth-service/internal/domain/entities"
 	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 )
 
 type AuthRepository interface {
-	FindUserByEmail(username, password string) (*entity.User, *rest_err.RestErr)
+	FindUserByEmail(username, password string) (*entities.User, *rest_err.RestErr)
 }
 
 type authRepository struct {
@@ -22,8 +22,8 @@ func NewAuthRepository(db *sql.DB) AuthRepository {
 	}
 }
 
-func (ar *authRepository) FindUserByEmail(username, password string) (*entity.User, *rest_err.RestErr) {
-	user := &entity.User{}
+func (ar *authRepository) FindUserByEmail(username, password string) (*entities.User, *rest_err.RestErr) {
+	user := &entities.User{}
 
 	stmt, _ := ar.database.Prepare("SELECT * FROM users WHERE email = $1")
 	defer stmt.Close()
