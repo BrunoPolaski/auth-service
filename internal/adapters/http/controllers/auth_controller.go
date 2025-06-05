@@ -6,7 +6,6 @@ import (
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/config/logger"
-	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
 )
 
 type AuthController interface {

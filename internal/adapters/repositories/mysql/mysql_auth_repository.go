@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/BrunoPolaski/auth-service/internal/domain/entities"
-	"github.com/BrunoPolaski/go-crud/src/configuration/rest_err"
+	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
 type AuthRepository interface {
