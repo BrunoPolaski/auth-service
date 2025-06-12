@@ -3,12 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/routes"
 	"github.com/BrunoPolaski/auth-service/internal/config/logger"
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/joho/godotenv"
 )
 
@@ -26,9 +23,5 @@ func main() {
 		return
 	}
 
-	if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") == "" {
-		log.Fatal(http.ListenAndServe(":8080", r))
-	} else {
-		lambda.Start(httpadapter.New(r).ProxyWithContext)
-	}
+	log.Fatal(http.ListenAndServe(":8081", r))
 }

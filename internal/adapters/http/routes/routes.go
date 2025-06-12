@@ -39,5 +39,9 @@ func Init() *http.ServeMux {
 
 	r.HandleFunc("POST /auth", authController.SignIn)
 
+	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	return r
 }
