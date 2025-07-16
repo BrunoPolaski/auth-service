@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/http/middlewares"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
@@ -12,7 +13,7 @@ import (
 	"github.com/BrunoPolaski/auth-service/internal/config/logger"
 )
 
-func Init() *http.ServeMux {
+func Init() http.Handler {
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(fmt.Sprintf("Failed to initialize routes: %v", r))
@@ -37,11 +38,11 @@ func Init() *http.ServeMux {
 	)
 	authController := controllers.NewAuthController(authService)
 
-	r.HandleFunc("POST /auth", authController.SignIn)
+	r.HandleFunc("POST /signin", authController.SignIn)
 
 	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	return r
+	return middlewares.LoggingMiddleware(r)
 }
