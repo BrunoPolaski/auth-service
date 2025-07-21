@@ -5,14 +5,15 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/http/middlewares"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
-	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
-	"github.com/BrunoPolaski/auth-service/internal/config/database"
-	"github.com/BrunoPolaski/auth-service/internal/config/logger"
+	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
+	"github.com/BrunoPolaski/auth-service/internal/infra/database"
+	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
 
-func Init() *http.ServeMux {
+func Init() http.Handler {
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(fmt.Sprintf("Failed to initialize routes: %v", r))
@@ -37,11 +38,14 @@ func Init() *http.ServeMux {
 	)
 	authController := controllers.NewAuthController(authService)
 
-	r.HandleFunc("POST /auth", authController.SignIn)
+	r.Handle("POST /signin", HandlerChain(
+		authController.SignIn,
+		middlewares.LoggingMiddleware,
+	))
 
 	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	return r
+	return middlewares.LoggingMiddleware(r)
 }

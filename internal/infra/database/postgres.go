@@ -10,7 +10,7 @@ import (
 
 type postgresAdapter struct{}
 
-func NewPostgresAdapter() *postgresAdapter {
+func NewPostgresAdapter() Database {
 	return &postgresAdapter{}
 }
 

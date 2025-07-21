@@ -6,6 +6,7 @@ toolchain go1.24.3
 
 require (
 	github.com/BrunoPolaski/go-rest-err v0.0.0-20250604233227-3ec7d1747ff2
+	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	golang.org/x/crypto v0.33.0

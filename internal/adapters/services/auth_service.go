@@ -2,12 +2,12 @@ package services
 
 import (
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
-	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
+	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
 	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
 type AuthService interface {
-	SignIn(username, password string) (string, *rest_err.RestErr)
+	SignIn(username, password string) (string, string, *rest_err.RestErr)
 }
 
 type authService struct {
@@ -22,16 +22,20 @@ func NewAuthService(authRepository mysql.AuthRepository, crypto crypto.Crypto) A
 	}
 }
 
-func (as *authService) SignIn(username, password string) (string, *rest_err.RestErr) {
+func (as *authService) SignIn(username, password string) (string, string, *rest_err.RestErr) {
 	hashedPassword, err := as.crypto.EncryptPassword(password)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	err = as.crypto.ComparePasswords(hashedPassword, password)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return "token", nil
+	return "token", "refreshToken", nil
+}
+
+func (as *authService) RefreshToken() {
+
 }

@@ -5,17 +5,18 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/routes"
-	"github.com/BrunoPolaski/auth-service/internal/config/logger"
+	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
-	}
 	logger.InitLogger()
 	logger.Info("Starting application")
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		logger.Error("Error loading env file: " + err.Error())
+	}
 
 	r := routes.Init()
 	if r == nil {
@@ -23,5 +24,5 @@ func main() {
 		return
 	}
 
-	log.Fatal(http.ListenAndServe(":8081", r))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }

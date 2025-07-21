@@ -5,8 +5,7 @@ import (
 	"net/http"
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
-	"github.com/BrunoPolaski/auth-service/internal/config/logger"
-	"github.com/BrunoPolaski/go-rest-err/rest_err"
+	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
 
 type AuthController interface {
@@ -24,19 +23,12 @@ func NewAuthController(service services.AuthService) AuthController {
 }
 
 func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
+	logger.Info("Authenticating user")
 	encoder := json.NewEncoder(w)
 
-	logger.Info("Authenticating user")
-	username, password, ok := r.BasicAuth()
-	if !ok {
-		httpErr := rest_err.NewUnauthorizedError("Basic auth header not found")
-		logger.Error(httpErr.Message)
-		w.WriteHeader(httpErr.Code)
-		encoder.Encode(httpErr)
-		return
-	}
+	username, password, _ := r.BasicAuth()
 
-	token, err := ac.authService.SignIn(username, password)
+	token, refreshToken, err := ac.authService.SignIn(username, password)
 	if err != nil {
 		logger.Error(err.Message)
 		w.WriteHeader(err.Code)
@@ -45,6 +37,11 @@ func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	encoder.Encode(map[string]string{
-		"token": token,
+		"refreshToken": refreshToken,
+		"token":        token,
 	})
+}
+
+func (ac *authController) RefreshToken(w http.ResponseWriter, r *http.Request) {
+
 }
