@@ -7,9 +7,9 @@ import (
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
-	"github.com/BrunoPolaski/auth-service/internal/config/crypto"
-	"github.com/BrunoPolaski/auth-service/internal/config/database"
-	"github.com/BrunoPolaski/auth-service/internal/config/logger"
+	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
+	"github.com/BrunoPolaski/auth-service/internal/infra/database"
+	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
 
 func Init() *http.ServeMux {
@@ -37,7 +37,11 @@ func Init() *http.ServeMux {
 	)
 	authController := controllers.NewAuthController(authService)
 
-	r.HandleFunc("POST /auth", authController.SignIn)
+	r.HandleFunc("POST /signin", authController.SignIn)
+
+	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
 
 	return r
 }
