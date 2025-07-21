@@ -38,7 +38,7 @@ func Init() http.Handler {
 	)
 	authController := controllers.NewAuthController(authService)
 
-	r.HandleFunc("POST /signin", authController.SignIn)
+	r.HandleFunc("POST /signin", middlewares.MiddlewareChain(authController.SignIn))
 
 	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

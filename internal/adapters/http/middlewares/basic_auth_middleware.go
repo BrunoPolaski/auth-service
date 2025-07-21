@@ -8,8 +8,8 @@ import (
 	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
-func BasicAuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func BasicAuthMiddleware(next http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		encoder := json.NewEncoder(w)
 		username, password, ok := r.BasicAuth()
 		if !ok || strings.TrimSpace(username) == "" || strings.TrimSpace(password) == "" {
@@ -19,5 +19,5 @@ func BasicAuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		next.ServeHTTP(w, r)
-	})
+	}
 }

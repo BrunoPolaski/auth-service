@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/BrunoPolaski/auth-service/internal/config/logger"
+	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
 
 func LoggingMiddleware(next http.Handler) http.Handler {
