@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories"
 	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
 	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
@@ -11,11 +11,11 @@ type AuthService interface {
 }
 
 type authService struct {
-	authRepository mysql.AuthRepository
+	authRepository repositories.AuthRepository
 	crypto         crypto.Crypto
 }
 
-func NewAuthService(authRepository mysql.AuthRepository, crypto crypto.Crypto) AuthService {
+func NewAuthService(authRepository repositories.AuthRepository, crypto crypto.Crypto) AuthService {
 	return &authService{
 		authRepository: authRepository,
 		crypto:         crypto,

@@ -6,7 +6,7 @@ import (
 
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/controllers"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/middlewares"
-	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories/mysql"
+	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
 	"github.com/BrunoPolaski/auth-service/internal/infra/database"
@@ -31,7 +31,7 @@ func Init() http.Handler {
 		return nil
 	}
 
-	authRepository := mysql.NewAuthRepository(conn)
+	authRepository := repositories.NewAuthRepository(conn)
 	authService := services.NewAuthService(
 		authRepository,
 		cryptoAdapter,
