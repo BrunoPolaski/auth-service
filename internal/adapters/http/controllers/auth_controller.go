@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/BrunoPolaski/auth-service/internal/adapters/http/dto"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
 	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
@@ -36,10 +37,12 @@ func (ac *authController) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	encoder.Encode(map[string]string{
-		"refreshToken": refreshToken,
-		"token":        token,
-	})
+	response := dto.SigninResponse{
+		RefreshToken: refreshToken,
+		AccessToken:  token,
+	}
+
+	encoder.Encode(response)
 }
 
 func (ac *authController) RefreshToken(w http.ResponseWriter, r *http.Request) {

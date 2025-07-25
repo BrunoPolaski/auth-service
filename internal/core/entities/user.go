@@ -1,65 +1,69 @@
 package entities
 
+import valueobjects "github.com/BrunoPolaski/auth-service/internal/core/value_objects"
+
 type User struct {
-	Id                  int64  `json:"id,omitempty"`
-	Email               string `json:"email"`
-	Password            string `json:"password"`
-	NeedsPasswordChange bool   `json:"needs_password_change,omitempty"`
-	CreatedAt           string `json:"created_at"`
-	IsActive            bool   `json:"is_active"`
+	id                  int64
+	email               string
+	password            valueobjects.Password
+	needsPasswordChange bool
+	createdAt           string
+	isActive            bool
 }
 
 func NewUser(email, password string) *User {
+	pwd, err := valueobjects.NewPassword(password)
+
 	return &User{
-		Email:    email,
-		Password: password,
+		email:    email,
+		password: password,
 	}
 }
 
 func (u *User) GetId() int64 {
-	return u.Id
+	return u.id
 }
 
 func (u *User) GetEmail() string {
-	return u.Email
+	return u.email
 }
 
 func (u *User) GetPassword() string {
-	return u.Password
+	return u.password
 }
 
 func (u *User) GetNeedsPasswordChange() bool {
-	return u.NeedsPasswordChange
+	return u.needsPasswordChange
 }
 
 func (u *User) GetCreatedAt() string {
-	return u.CreatedAt
+	return u.createdAt
 }
 
 func (u *User) GetIsActive() bool {
-	return u.IsActive
+	return u.isActive
 }
 
 func (u *User) SetId(id int64) {
-	u.Id = id
+	u.id = id
 }
 
 func (u *User) SetEmail(email string) {
-	u.Email = email
+	u.email = email
 }
 
 func (u *User) SetPassword(password string) {
-	u.Password = password
+	u.password = password
 }
 
 func (u *User) SetNeedsPasswordChange(needsPasswordChange bool) {
-	u.NeedsPasswordChange = needsPasswordChange
+	u.needsPasswordChange = needsPasswordChange
 }
 
 func (u *User) SetCreatedAt(createdAt string) {
-	u.CreatedAt = createdAt
+	u.createdAt = createdAt
 }
 
 func (u *User) SetActive(isActive bool) {
-	u.IsActive = isActive
+	u.isActive = isActive
 }
