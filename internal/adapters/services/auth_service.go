@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories"
-	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
+	valueobjects "github.com/BrunoPolaski/auth-service/internal/core/value_objects"
 	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
@@ -11,26 +11,29 @@ type AuthService interface {
 }
 
 type authService struct {
-	authRepository repositories.AuthRepository
-	crypto         crypto.Crypto
+	userRepository repositories.UserRepository
 }
 
-func NewAuthService(authRepository repositories.AuthRepository, crypto crypto.Crypto) AuthService {
+func NewAuthService(userRepository repositories.UserRepository) AuthService {
 	return &authService{
-		authRepository: authRepository,
-		crypto:         crypto,
+		userRepository: userRepository,
 	}
 }
 
 func (as *authService) SignIn(username, password string) (string, string, *rest_err.RestErr) {
-	hashedPassword, err := as.crypto.EncryptPassword(password)
+	pwd, err := valueobjects.NewPassword(password)
 	if err != nil {
-		return "", "", err
+		return "", "", rest_err.NewBadRequestError(err.Error())
 	}
 
-	err = as.crypto.ComparePasswords(hashedPassword, password)
+	user, restErr := as.userRepository.FindUserByEmail(username)
+	if restErr != nil {
+		return "", "", restErr
+	}
+
+	err = pwd.ComparePassword(user.Password().Value())
 	if err != nil {
-		return "", "", err
+		return "", "", rest_err.NewUnauthorizedError(err.Error())
 	}
 
 	return "token", "refreshToken", nil

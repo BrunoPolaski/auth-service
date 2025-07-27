@@ -29,8 +29,14 @@ services:
       start_period: 10s
     networks:
       - auth-network
+    volumes:
+      - auth-service-db-data:/var/lib/postgresql/data
       
 networks:
   auth-network:
   ms-network:
     external: true
+
+volumes:
+  auth-service-db-data:
+    driver: local

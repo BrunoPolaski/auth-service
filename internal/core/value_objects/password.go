@@ -2,7 +2,7 @@ package valueobjects
 
 import (
 	"errors"
-	"regexp"
+	"unicode"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,9 +21,24 @@ func NewPassword(p string) (Password, error) {
 	return Password{p}, nil
 }
 
-func isValidPassword(password string) bool {
-	var re = regexp.MustCompile(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$`)
-	return re.MatchString(password)
+func isValidPassword(p string) bool {
+	if len(p) < 8 {
+		return false
+	}
+	var hasUpper, hasLower, hasDigit, hasSpecial bool
+	for _, c := range p {
+		switch {
+		case unicode.IsUpper(c):
+			hasUpper = true
+		case unicode.IsLower(c):
+			hasLower = true
+		case unicode.IsDigit(c):
+			hasDigit = true
+		case unicode.IsPunct(c) || unicode.IsSymbol(c):
+			hasSpecial = true
+		}
+	}
+	return hasUpper && hasLower && hasDigit && hasSpecial
 }
 
 func (p *Password) EncryptPassword() error {
@@ -41,4 +56,8 @@ func (p *Password) ComparePassword(password string) error {
 	} else {
 		return nil
 	}
+}
+
+func (p *Password) Value() string {
+	return p.value
 }

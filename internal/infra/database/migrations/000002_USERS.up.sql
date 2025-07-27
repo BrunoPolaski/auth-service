@@ -1,12 +1,10 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     uuid VARCHAR(36) PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     user_type VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tenant_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(uuid)
 );
-
-ALTER TABLE tokens
-ADD CONSTRAINT fk_tokens_users
-FOREIGN KEY (user_id) REFERENCES users(uuid);

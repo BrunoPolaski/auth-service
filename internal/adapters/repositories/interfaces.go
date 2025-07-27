@@ -5,6 +5,10 @@ import (
 	"github.com/BrunoPolaski/go-rest-err/rest_err"
 )
 
-type AuthRepository interface {
-	FindUserByEmail(username, password string) (*entities.User, *rest_err.RestErr)
+type UserRepository interface {
+	FindUserByEmail(username string) (*entities.User, *rest_err.RestErr)
+}
+
+type TokenRepository interface {
+	FindById(token string) *entities.User
 }

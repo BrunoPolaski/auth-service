@@ -8,7 +8,6 @@ import (
 	"github.com/BrunoPolaski/auth-service/internal/adapters/http/middlewares"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/repositories"
 	"github.com/BrunoPolaski/auth-service/internal/adapters/services"
-	"github.com/BrunoPolaski/auth-service/internal/infra/crypto"
 	"github.com/BrunoPolaski/auth-service/internal/infra/database"
 	"github.com/BrunoPolaski/auth-service/internal/infra/logger"
 )
@@ -23,7 +22,6 @@ func Init() http.Handler {
 	r := http.NewServeMux()
 
 	var databaseAdapter database.Database = database.NewPostgresAdapter()
-	var cryptoAdapter crypto.Crypto = crypto.NewBcryptAdapter()
 
 	conn, err := databaseAdapter.Connect()
 	if err != nil {
@@ -31,11 +29,8 @@ func Init() http.Handler {
 		return nil
 	}
 
-	authRepository := repositories.NewAuthRepository(conn)
-	authService := services.NewAuthService(
-		authRepository,
-		cryptoAdapter,
-	)
+	userRepository := repositories.NewUserRepository(conn)
+	authService := services.NewAuthService(userRepository)
 	authController := controllers.NewAuthController(authService)
 
 	r.Handle("POST /signin", HandlerChain(
