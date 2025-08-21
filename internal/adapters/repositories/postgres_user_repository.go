@@ -19,7 +19,7 @@ func NewUserRepository(db *sql.DB) UserRepository {
 	}
 }
 
-func (ur *userRepository) FindUserByEmail(username string) (*entities.User, *rest_err.RestErr) {
+func (ur *userRepository) GetByEmail(username string) (*entities.User, *rest_err.RestErr) {
 	userORM := &ormentities.UserORM{}
 
 	stmt, _ := ur.database.Prepare("SELECT * FROM users WHERE email = $1")

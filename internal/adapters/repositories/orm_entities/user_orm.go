@@ -9,12 +9,12 @@ import (
 )
 
 type UserORM struct {
-	Id                  int64     `db:"id"`
-	Email               string    `db:"email"`
-	Password            string    `db:"password"`
-	NeedsPasswordChange bool      `db:"needs_password_change"`
-	CreatedAt           time.Time `db:"created_at"`
-	IsActive            bool      `db:"is_active"`
+	Id                  int64
+	Email               string
+	Password            string
+	NeedsPasswordChange bool
+	CreatedAt           time.Time
+	IsActive            bool
 }
 
 func (u *UserORM) ToDomain() (*entities.User, error) {

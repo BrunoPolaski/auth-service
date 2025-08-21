@@ -36,6 +36,7 @@ func Init() http.Handler {
 	r.Handle("POST /signin", HandlerChain(
 		authController.SignIn,
 		middlewares.LoggingMiddleware,
+		middlewares.BasicAuthMiddleware,
 	))
 
 	r.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {

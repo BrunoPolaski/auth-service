@@ -11,27 +11,27 @@ endif
 
 migrate-up:
 	@echo -e "\033[44m \033[97m Running database migrations up... \033[0m"
-	migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up
+	@migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up
 	@echo -e "\033[42m Migrations completed. \033[0m"
 
 migrate-single:
 	@echo -e "\033[44m \033[97m Running single database migration... \033[0m"
-	migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up 1
+	@migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up 1
 	@echo -e "\033[42m Single migration completed. \033[0m"
 
 migrate-down:
 	@echo -e "\033[44m \033[97m Running database migrations down... \033[0m"
-	migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable down
+	@migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable down
 	@echo -e "\033[42m Migrations rolled back. \033[0m"
 
 migrate-prev:
 	@echo -e "\033[44m \033[97m Running database migrations to previous version... \033[0m"
-	migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable down 1
+	@migrate -path internal/infra/database/migrations -database postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_CONN_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable down 1
 	@echo -e "\033[42m Migration rolled back. \033[0m"
 
 migrate-create:
 	@echo -e "\033[44m \033[97m Creating new migration file... \033[0m"
-	migrate create -ext sql -dir internal/infra/database/migrations -seq $(name)
+	@migrate create -ext sql -dir internal/infra/database/migrations -seq $(name)
 	@echo -e "\033[42m Migration file created.\033[0m"
 
 migrate-fix:

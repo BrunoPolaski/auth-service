@@ -26,7 +26,7 @@ func (as *authService) SignIn(username, password string) (string, string, *rest_
 		return "", "", rest_err.NewBadRequestError(err.Error())
 	}
 
-	user, restErr := as.userRepository.FindUserByEmail(username)
+	user, restErr := as.userRepository.GetByEmail(username)
 	if restErr != nil {
 		return "", "", restErr
 	}

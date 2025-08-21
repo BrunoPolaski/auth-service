@@ -6,9 +6,13 @@ import (
 )
 
 type UserRepository interface {
-	FindUserByEmail(username string) (*entities.User, *rest_err.RestErr)
+	GetByEmail(username string) (*entities.User, *rest_err.RestErr)
 }
 
 type TokenRepository interface {
-	FindById(token string) *entities.User
+	GetById(token string) *entities.User
+}
+
+type ApiKeyRepository interface {
+	GetById(uuid string) (*entities.ApiKey, *rest_err.RestErr)
 }
