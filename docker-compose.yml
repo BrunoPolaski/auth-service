@@ -22,18 +22,35 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 40
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       retries: 5
-      start_period: 10s
+      start_period: 0s
     networks:
       - auth-network
+      - postgres-network
     volumes:
       - auth-service-db-data:/var/lib/postgresql/data
-      
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "polaskibruno03@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+    logging:
+      driver: "none"
+
 networks:
   auth-network:
+  postgres-network:
   ms-network:
     external: true
 
